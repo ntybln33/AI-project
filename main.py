@@ -16,6 +16,7 @@ def generate_content(client, message):
 def main() -> None:
     parser = argparse.ArgumentParser(description="AI Code Assistant")
     parser.add_argument("user_prompt", type=str, help="Prompt to send to the LLM")
+    parser.add_argument("--verbose", action="store_true", help="enable verbose output")
     args = parser.parse_args()
 
     load_dotenv()
@@ -38,9 +39,11 @@ def main() -> None:
     if not response.usage:
         raise RuntimeError("API response appears to be malformed")
 
-    print("Prompt tokens:", response.usage.prompt_tokens)
-    print("Response tokens:", response.usage.completion_tokens)
-    print("Response:")
+    if args.verbose:
+        print("User prompt:", args.user_prompt)
+        print("Prompt tokens:", response.usage.prompt_tokens)
+        print("Response tokens:", response.usage.completion_tokens)
+        print("Response:")
     print(response.choices[0].message.content)
 
 
